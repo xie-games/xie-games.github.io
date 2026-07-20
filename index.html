@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xie Games</title>
+    <style>
+        body {
+            color: #00ff00;
+            background-color: black;
+        }
+        body::before {
+            content: "";
+            top: 0;
+            position: fixed;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent  2px,
+                rgba(0, 0, 0, 0.15) 2px,
+                rgba(0, 0, 0, 0.15) 4px
+            );
+        }
+        #bg-3d-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .content-layer {
+            position: relative;
+            z-index: 1; /* 确保内容在 3D 模型之上 */
+            padding: 50px;
+            color: #00ff00; /* 黑客风配色 */
+        }
+        header {
+            background-color: black;
+            display: flex;
+            align-items: center;
+            border: 1px solid #00ff00;
+            padding: 5px 5px;
+            gap: 10px;
+        }
+        button, img {
+            border: 1px solid #00ff00;
+            background-color: black;
+            padding: 5px 5px;
+        }
+        .img-pingtai {
+            background-color: black;
+            padding: 1px 1px;
+            border: 0px solid #00ff00;
+        }
+        code {
+            display: flex;
+            align-items: center;
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+
+            background-color: black;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 5px 5px;
+        }
+        h1, h2{
+            font-family: monospace;
+        }
+        span {
+            color:red;
+            font-family: monospace;
+        }
+        h3 {
+            line-height: 0px;
+            color:red;
+            font-family: monospace;
+        }
+        p {
+            font-family: monospace;
+            font-size: 15px;
+            line-height: 0px;
+        }
+        .game-display {
+            display: flex;
+            gap:10px;
+        }
+        .game {
+            border: 1px solid #00ff00;
+            padding:10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-3d-canvas"></div>
+    <div class="content-layer">
+        <header>
+            <img src="image/xie.png" width="50" height="50" alt="logo" />
+            <h1>Xie Games™</h1>
+            <h2 style="font-family: monospace; margin-left: auto;">Language: </h2>
+            <select>
+                <option value="e">English</option>
+                <option value="sc">简体中文</option>
+            </select>
+        </header>
+
+        <main>
+            <h2>Introduction:</h2>
+            <p>Likes creating spoof and <span>horror</span> games.</p>
+            <br />
+            <br />
+            <h2>Games:</h2>
+            <div class="game-display">
+                <div class="game">
+                    <img src="image/mowan.png" alt="thief" width="300" height="200" />
+                    <h3>Thief</h3>
+                    <p>An spoof game about stealing.</p>
+                    <img class="img-pingtai" src="image/windows.png" alt="windows" width="20" height="20" />
+                    <img class="img-pingtai" src="image/android.png" alt="android" width="20" height="20" />
+                </div>
+                <div class="game">
+                    <img src="image/梅姨.png" alt="monitor" width="300" height="200" />
+                    <h3>Monitor</h3>
+                    <p>An horror game about monitoring.</p>
+                    <img class="img-pingtai" src="image/windows.png" alt="windows" width="20" height="20" />
+                    <img class="img-pingtai" src="image/android.png" alt="android" width="20" height="20" />
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.131.1/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.131.1/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.131.1/examples/js/loaders/MTLLoader.js"></script>
+
+    <script>
+        var bg = document.getElementById("bg-3d-canvas");
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5; // 相机稍微拉远一点
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true }); // alpha:true 让背景透明
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        bg.appendChild(renderer.domElement);
+
+        var ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+        var light = new THREE.DirectionalLight(0xffffff, 0.3);
+        light.position.set(1, 1, 1);
+        scene.add(light);
+
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.load("coconutjuice.mtl", function (materials) {
+            materials.preload(); // 预加载材质
+
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(materials);
+
+            objLoader.load("model/coconutjuice.obj", function (object){
+                scene.add(object);
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    object.rotation.x += 0.005;
+                    object.rotation.y += 0.015;
+                    object.rotation.z += 0.005;
+                    renderer.render(scene, camera);
+                }
+                animate();
+            });
+        }, undefined, function (error){
+            console.error("Material loading failed!", error);
+        });
+
+        // 4. 渲染循环
+        function animate() {
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener("resize", () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
