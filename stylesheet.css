@@ -1,5 +1,12 @@
+@font-face {
+    font-family: "HuayingMingchao";
+    src: url("/font/huayingMingchao.ttf");
+    font-display: swap;
+    font-weight: normal;
+    font-style: normal;
+}
 body {
-    color: #fb922b;
+    color: #f0f;
     background-color: black;
 }
 body::before {
@@ -24,12 +31,12 @@ header {
     background-color: black;
     display: flex;
     align-items: center;
-    border: 1px solid #ff5d6e;
+    border: 1px solid #00ff00;
     padding: 5px 5px;
     gap: 10px;
 }
 button, img {
-    border: 1px solid #ff5d6e;
+    border: 1px solid #00ff00;
     background-color: black;
     padding: 5px 5px;
 }
@@ -38,19 +45,19 @@ code {
     align-items: center;
 }
 h1, h2{
-    color: #7c7bf0;
-    font-family: monospace;
+    color: #00f;
+    font-family: "HuayingMingchao", monospace;
 }
 span {
-    color:#7c7bf0;
-    font-family: monospace;
+    color:orange;
+    font-family: "HuayingMingchao", monospace;
 }
 h3 {
-    color:#7c7bf0;
-    font-family: monospace;
+    color:#ff0000;
+    font-family: "HuayingMingchao", monospace;
 }
 p {
-    font-family: monospace;
+    font-family: "HuayingMingchao", monospace;
     font-size: 15px;
     line-height: 0px;
 }
@@ -59,15 +66,15 @@ p {
     gap:10px;
 }
 .program {
-    border: 1px solid #ff5d6e;
+    border: 1px solid #0f0;
     padding:10px;
 }
 .button-program {
-    color: #7c7bf0;
+    color: #0f0;
     background-color: black;
 }
 .button-program:hover {
-    background-color: #7c7bf0;
+    background-color: #0f0;
     color: #000
 }
 .a-program {
